@@ -25,14 +25,14 @@ if not args.url.startswith("http://") and not args.url.startswith("https://"):
     print("The URL must start with http:// or https://. Please try again.")
     exit()
 
-for i in methods:
-    f.seek(0) 
+stripped_lines = [line.strip() for line in f]
+for method in methods:
     endpoint = args.url
-    stripped_lines = [line.strip() for line in f]
+    
     for line in stripped_lines:
         endpoint = args.url + "/" + line
-        req = requests.request(i, endpoint, headers=headers, proxies=proxies, verify=False)
+        req = requests.request(method, endpoint, headers=headers, proxies=proxies, verify=False, allow_redirects=False)
         code = req.status_code
         text = req.text
         rsp = '"error":"Internal Server Error"'
-        print(i.upper(), "-", code)
+        print(method.upper(), "-", code)
